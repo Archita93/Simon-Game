@@ -4,7 +4,12 @@ var gamePattern = [];
 
 var userClickedPattern = [];
 
+var level = 0;
+
 var audio;
+
+var started = false;
+
 function nextSequence(){
 
     var  randomNumber = Math.floor(Math.random()*4);
@@ -19,7 +24,14 @@ function nextSequence(){
     // Used playSound function to play the audio
     playSound(randomChosenColour);
 
+    level++;    
+
+    $("h1").text("Level "+level);
+
+    started = true;
     // returned the chosen colour
+
+    
     return randomChosenColour;
 }
 
@@ -40,4 +52,28 @@ $(".btn").click(function(){
     userClickedPattern.push(userChosenColour);
     playSound(userChosenColour);
     animatePress(userChosenColour);
+    if(checkAnswer(userClickedPattern[userClickedPattern.length-1])  === true){
+        if(gamePattern.length == userClickedPattern.length){
+            setTimeout(nextSequence,1000);
+            userClickedPattern = [];
+        }
+    }
+    else{
+        audio = new Audio()
+    }
 })
+
+$(document).keydown(function(){
+    if(started != true){
+        nextSequence();
+    }
+})
+
+function checkAnswer(level){
+    if(userClickedPattern[userClickedPattern.length-1] == gamePattern[gamePattern.length-1]){
+        return true;
+    }
+    else{
+        return false;
+    }
+}
