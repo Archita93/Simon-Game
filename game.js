@@ -12,22 +12,32 @@ function nextSequence(){
 
     // Pushed to gamePattern array
     gamePattern.push(randomChosenColour);
-    
-    // Added an audio for chosen button
-    audio = new Audio("sounds/"+randomChosenColour+".mp3");
 
     // Added animation for the chosen button
     $("#"+randomChosenColour).fadeOut(100).fadeIn(100);
-
-    // Played the audio 
-    audio.play();
+ 
+    // Used playSound function to play the audio
+    playSound(randomChosenColour);
 
     // returned the chosen colour
     return randomChosenColour;
 }
 
+function playSound(name){
+    audio = new Audio("sounds/"+name+".mp3");
+    audio.play();
+}
+
+function animatePress(currentColour){
+    $("#"+currentColour).addClass("pressed");
+    setTimeout(function(){
+        $("#"+currentColour).removeClass("pressed");
+    }, 100);
+}
+
 $(".btn").click(function(){
     var userChosenColour = $(this).attr("id");
     userClickedPattern.push(userChosenColour);
-    console.log(userClickedPattern);
+    playSound(userChosenColour);
+    animatePress(userChosenColour);
 })
