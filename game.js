@@ -51,10 +51,9 @@ $(".btn").click(function(){
     userClickedPattern.push(userChosenColour);
     playSound(userChosenColour);
     animatePress(userChosenColour);
-    checkAnswer(userClickedPattern.length-1);
-    
-        
+    checkAnswer(userClickedPattern.length-1);        
 })
+
 
 $(document).keydown(function(){
     if(started != true){
@@ -64,31 +63,23 @@ $(document).keydown(function(){
 
 
 function checkAnswer(currentLevel){
-    if(currentLevel===gamePattern.length-1){
-        if(equals(gamePattern,userClickedPattern)==true){
-            if(gamePattern[currentLevel]===userClickedPattern[currentLevel]){
+    if(userClickedPattern.length===gamePattern.length){
+        if(gamePattern[currentLevel]===userClickedPattern[currentLevel]){
+            if(equals(gamePattern,userClickedPattern)===true){
                 setTimeout(function(){
                     nextSequence();
                     userClickedPattern = [];
         
                 },1000);
             }
-
         }
         else{
-            audio = new Audio("sounds/wrong.mp3");
-            audio.play();
-            $("body").addClass("gameOver");
-            setTimeout(function(){
-                $("body").removeClass("gameOver")
-            },200);
-            $("h1").text("Game over, Press Any Key to Restart");
+            gameOver();
         }
        
     }
         
 }
-
 
 function equals(arr1,arr2){
     if(arr1.length===arr2.length){
@@ -97,7 +88,28 @@ function equals(arr1,arr2){
                 return false;
             }
         }
+        return true;
     }
-    return true;
+    gameOver();
+    return false;
+   
+    
 }
 
+function startOver(){
+    level = 0;
+    gamePattern = [];
+    started = false;
+    userClickedPattern = [];
+}
+
+function gameOver(){
+    audio = new Audio("sounds/wrong.mp3");
+    audio.play();
+    $("body").addClass("gameOver");
+    setTimeout(function(){
+        $("body").removeClass("gameOver")
+    },200);
+    $("h1").text("Game over, Press Any Key to Restart");
+    startOver();
+}
