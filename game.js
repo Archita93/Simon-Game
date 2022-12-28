@@ -31,7 +31,6 @@ function nextSequence(){
     started = true;
     // returned the chosen colour
 
-    
     return randomChosenColour;
 }
 
@@ -52,15 +51,9 @@ $(".btn").click(function(){
     userClickedPattern.push(userChosenColour);
     playSound(userChosenColour);
     animatePress(userChosenColour);
-    if(checkAnswer(userClickedPattern[userClickedPattern.length-1])  === true){
-        if(gamePattern.length == userClickedPattern.length){
-            setTimeout(nextSequence,1000);
-            userClickedPattern = [];
-        }
-    }
-    else{
-        audio = new Audio()
-    }
+    checkAnswer(userClickedPattern.length-1);
+    
+        
 })
 
 $(document).keydown(function(){
@@ -69,11 +62,42 @@ $(document).keydown(function(){
     }
 })
 
-function checkAnswer(level){
-    if(userClickedPattern[userClickedPattern.length-1] == gamePattern[gamePattern.length-1]){
-        return true;
+
+function checkAnswer(currentLevel){
+    if(currentLevel===gamePattern.length-1){
+        if(equals(gamePattern,userClickedPattern)==true){
+            if(gamePattern[currentLevel]===userClickedPattern[currentLevel]){
+                setTimeout(function(){
+                    nextSequence();
+                    userClickedPattern = [];
+        
+                },1000);
+            }
+
+        }
+        else{
+            audio = new Audio("sounds/wrong.mp3");
+            audio.play();
+            $("body").addClass("gameOver");
+            setTimeout(function(){
+                $("body").removeClass("gameOver")
+            },200);
+            $("h1").text("Game over, Press Any Key to Restart");
+        }
+       
     }
-    else{
-        return false;
-    }
+        
 }
+
+
+function equals(arr1,arr2){
+    if(arr1.length===arr2.length){
+        for(var i = 0; i < arr1.length; i++){
+            if(arr1[i]!==arr2[i]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
